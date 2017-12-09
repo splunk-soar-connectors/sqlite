@@ -137,7 +137,7 @@
             "action": "list columns",
             "identifier": "list_columns",
             "description": "List the columns of a table",
-            "verbose": "The <b>table_name</b> parameter must be composed of only alphanumeric characters plus '_' and '$'",
+            "verbose": "The <b>table_name</b> parameter must be composed of only alphanumeric characters plus '_' and '$'.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
