@@ -38,7 +38,7 @@
             "action": "run query",
             "identifier": "run_query",
             "description": "Run a query against a table or tables in the database",
-            "type": "generic",
+            "type": "investigate",
             "read_only": false,
             "parameters": {
                 "query": {
@@ -138,7 +138,7 @@
             "identifier": "list_columns",
             "description": "List the columns of a table",
             "verbose": "",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "table_name": {
@@ -255,7 +255,7 @@
             "identifier": "list_tables",
             "description": "List the Tables in the Database",
             "verbose": "Describes the structure of a table in the database by displaying information about its columns. The only tables which it will be able to query for must have a name composed of only alphanumeric characters + '_' and '$'.",
-            "type": "generic",
+            "type": "investigate",
             "read_only": true,
             "parameters": {},
             "output": [
