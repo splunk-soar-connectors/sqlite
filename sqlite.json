@@ -137,7 +137,7 @@
             "action": "list columns",
             "identifier": "list_columns",
             "description": "List the columns of a table",
-            "verbose": "",
+            "verbose": "The <b>table_name</b> parameter must be composed of only alphanumeric characters plus '_' and '$'",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -254,7 +254,6 @@
             "action": "list tables",
             "identifier": "list_tables",
             "description": "List the Tables in the Database",
-            "verbose": "Describes the structure of a table in the database by displaying information about its columns. The only tables which it will be able to query for must have a name composed of only alphanumeric characters + '_' and '$'.",
             "type": "investigate",
             "read_only": true,
             "parameters": {},

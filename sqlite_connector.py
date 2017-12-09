@@ -17,6 +17,7 @@ from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
 import os
+import re
 import csv
 import json
 import sqlite3
@@ -109,10 +110,10 @@ class SqliteConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         table_name = param['table_name']
 
-        if not table_name.isalnum():
+        if not re.match(r'^[a-z0-9_$]+$', table_name, re.IGNORECASE):
             return action_result.set_status(
                 phantom.APP_ERROR,
-                "table_name must be alphanumeric"
+                "table_name can only contains alphanumeric characters + '_' and '$'"
             )
 
         query = "SELECT * FROM sqlite_master WHERE type='table' AND name=?;"
