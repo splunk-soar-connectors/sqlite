@@ -58,6 +58,15 @@ class SqliteConnector(BaseConnector):
 
     def _handle_test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
+
+        query = "pragma schema_version;"
+        try:
+            self._cursor.execute(query)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Test connectivity failed", e
+            )
+
         query = "select sqlite_version();"
         try:
             self._cursor.execute(query)
@@ -77,6 +86,9 @@ class SqliteConnector(BaseConnector):
         format_vars = self._get_format_vars(param)
 
         try:
+            # The BEGIN starts the query as a transaction, so the changes
+            #  will not autocommit (i.e. create / drop table)
+            self._cursor.execute('BEGIN')
             self._cursor.execute(query, format_vars)
         except Exception as e:
             return action_result.set_status(
@@ -99,10 +111,7 @@ class SqliteConnector(BaseConnector):
             action_result.add_data(row)
 
         summary = action_result.update_summary({})
-        if self._cursor.rowcount > 0:
-            summary['total_rows'] = self._cursor.rowcount
-        else:
-            summary['total_rows'] = 0
+        summary['total_rows'] = len(results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully ran query")
 
@@ -144,6 +153,9 @@ class SqliteConnector(BaseConnector):
         for row in results:
             action_result.add_data(row)
 
+        summary = action_result.update_summary({})
+        summary['num_columns'] = len(results)
+
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed columns")
 
     def _handle_list_tables(self, param):
@@ -163,6 +175,9 @@ class SqliteConnector(BaseConnector):
 
         for row in results:
             action_result.add_data(row)
+
+        summary = action_result.update_summary({})
+        summary['num_tables'] = len(results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed tables")
 
@@ -192,7 +207,8 @@ class SqliteConnector(BaseConnector):
     def _initialize_error(self, msg, exception=None):
         if self.get_action_identifier() == "test_connectivity":
             self.save_progress(msg)
-            self.save_progress(str(exception))
+            if exception:
+                self.save_progress(str(exception))
             self.set_status(phantom.APP_ERROR, "Test Connectivity Failed")
         else:
             self.set_status(phantom.APP_ERROR, msg, exception)
@@ -214,7 +230,8 @@ class SqliteConnector(BaseConnector):
         try:
             self._connection = sqlite3.connect(
                 path,
-                detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+                detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+                isolation_level=None
             )
             self._cursor = self._connection.cursor()
         except Exception as e:
