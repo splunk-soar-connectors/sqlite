@@ -1,7 +1,7 @@
 {
     "appid": "6eba2c65-cac0-4a5f-9e5d-3c79d2d90aeb",
     "name": "SQLite",
-    "description": "This app supports several query actions against an SQLite Database",
+    "description": "This app supports several query actions against a local SQLite Database",
     "type": "information",
     "product_vendor": "SQLite",
     "logo": "sqlite.png",
@@ -253,7 +253,7 @@
         {
             "action": "list tables",
             "identifier": "list_tables",
-            "description": "List the Tables in the Database",
+            "description": "List the tables in the database",
             "type": "investigate",
             "read_only": true,
             "parameters": {},
