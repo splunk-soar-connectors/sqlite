@@ -58,6 +58,15 @@ class SqliteConnector(BaseConnector):
 
     def _handle_test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
+
+        query = "pragma schema_version;"
+        try:
+            self._cursor.execute(query)
+        except Exception as e:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Test connectivity failed", e
+            )
+
         query = "select sqlite_version();"
         try:
             self._cursor.execute(query)
@@ -184,7 +193,8 @@ class SqliteConnector(BaseConnector):
     def _initialize_error(self, msg, exception=None):
         if self.get_action_identifier() == "test_connectivity":
             self.save_progress(msg)
-            self.save_progress(str(exception))
+            if exception:
+                self.save_progress(str(exception))
             self.set_status(phantom.APP_ERROR, "Test Connectivity Failed")
         else:
             self.set_status(phantom.APP_ERROR, msg, exception)
