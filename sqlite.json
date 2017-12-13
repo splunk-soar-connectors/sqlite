@@ -220,7 +220,7 @@
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.summary",
+                    "data_path": "action_result.summary.num_columns",
                     "data_type": "numeric"
                 },
                 {
