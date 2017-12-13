@@ -100,10 +100,7 @@ class SqliteConnector(BaseConnector):
             action_result.add_data(row)
 
         summary = action_result.update_summary({})
-        if self._cursor.rowcount > 0:
-            summary['total_rows'] = self._cursor.rowcount
-        else:
-            summary['total_rows'] = 0
+        summary['num_rows'] = len(results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully ran query")
 
@@ -145,6 +142,9 @@ class SqliteConnector(BaseConnector):
         for row in results:
             action_result.add_data(row)
 
+        summary = action_result.update_summary({})
+        summary['num_columns'] = len(results)
+
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed columns")
 
     def _handle_list_tables(self, param):
@@ -164,6 +164,9 @@ class SqliteConnector(BaseConnector):
 
         for row in results:
             action_result.add_data(row)
+
+        summary = action_result.update_summary({})
+        summary['num_tables'] = len(results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed tables")
 
