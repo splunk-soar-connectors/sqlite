@@ -83,14 +83,6 @@ class SqliteConnector(BaseConnector):
                 phantom.APP_ERROR, "Error running query", e
             )
 
-        if not param.get('no_commit', False):
-            try:
-                self._connection.commit()
-            except Exception as e:
-                return action_result.set_status(
-                    phantom.APP_ERROR, "Unable to commit changes", e
-                )
-
         ret_val, results = self._get_query_results(action_result)
         if phantom.is_fail(ret_val):
             return ret_val
