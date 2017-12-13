@@ -86,6 +86,9 @@ class SqliteConnector(BaseConnector):
         format_vars = self._get_format_vars(param)
 
         try:
+            # The BEGIN starts the query as a transaction, so the changes
+            #  will not autocommit (i.e. create / drop table)
+            self._cursor.execute('BEGIN')
             self._cursor.execute(query, format_vars)
         except Exception as e:
             return action_result.set_status(
@@ -108,7 +111,7 @@ class SqliteConnector(BaseConnector):
             action_result.add_data(row)
 
         summary = action_result.update_summary({})
-        summary['num_rows'] = len(results)
+        summary['total_rows'] = len(results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully ran query")
 
@@ -227,7 +230,8 @@ class SqliteConnector(BaseConnector):
         try:
             self._connection = sqlite3.connect(
                 path,
-                detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+                detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+                isolation_level=None
             )
             self._cursor = self._connection.cursor()
         except Exception as e:

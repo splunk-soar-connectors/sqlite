@@ -84,6 +84,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.parameter.no_commit",
+                    "data_type": "boolean"
+                },
+                {
                     "data_path": "action_result.parameter.query",
                     "data_type": "string",
                     "contains": [
@@ -98,7 +102,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary.num_rows",
+                    "data_path": "action_result.summary.total_rows",
                     "data_type": "numeric"
                 },
                 {
