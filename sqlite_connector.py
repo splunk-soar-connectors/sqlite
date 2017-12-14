@@ -38,7 +38,7 @@ class SqliteConnector(BaseConnector):
     def _get_format_vars(self, param):
         format_vars = param.get('format_vars')
         if format_vars:
-            format_vars = csv.reader([format_vars], quotechar='"', skipinitialspace=True).next()
+            format_vars = csv.reader([format_vars], quotechar='"', skipinitialspace=True, escapechar='\\').next()
         else:
             format_vars = tuple()
         return format_vars
