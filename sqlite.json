@@ -9,7 +9,7 @@
     "product_name": "SQLite",
     "product_version_regex": ".*",
     "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2017",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2017-2018",
     "app_version": "1.0.10",
     "utctime_updated": "2017-12-21T22:42:53.000000Z",
     "package_name": "phantom_sqlite",
