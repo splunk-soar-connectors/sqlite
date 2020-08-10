@@ -7,6 +7,7 @@
 import phantom.app as phantom
 from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
+from phantom.vault import Vault
 
 import os
 import re
@@ -26,6 +27,10 @@ class SqliteConnector(BaseConnector):
     def __init__(self):
         super(SqliteConnector, self).__init__()
         self._state = None
+
+        self._asset_db_path = None
+        self._connection = None
+        self._cursor = None
 
     def _get_format_vars(self, param):
         format_vars = param.get('format_vars')
@@ -177,6 +182,10 @@ class SqliteConnector(BaseConnector):
 
         ret_val = phantom.APP_SUCCESS
 
+        init_result = self._init_db(param.get('vault_id', None))
+        if phantom.is_fail(init_result):
+            return self.get_status()
+
         # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
 
@@ -206,18 +215,13 @@ class SqliteConnector(BaseConnector):
             self.set_status(phantom.APP_ERROR, msg, exception)
         return phantom.APP_ERROR
 
-    def initialize(self):
-        config = self.get_config()
-        self._state = self.load_state()
-        path = config.get('database_path')
-        if path is None:
-            state_dir = self.get_state_dir()
-            asset_id = self.get_asset_id()
-            path = '{}/{}_db.db'.format(state_dir, asset_id)
+    def _init_db(self, vault_id=None):
+        if vault_id:
+            # get file location from vault
+            path = Vault.get_file_path(vault_id)
         else:
-            # Don't create a databse if they provided a path, throw an error if it doesn't exist
-            if not os.path.isfile(path):
-                return self._initialize_error("No SQLite database could be found at provided path")
+            # use asset configured db file
+            path = self._asset_db_path
 
         try:
             self._connection = sqlite3.connect(
@@ -227,8 +231,26 @@ class SqliteConnector(BaseConnector):
             )
             self._cursor = self._connection.cursor()
         except Exception as e:
-            return self._initialize_error("error connecting to database", e)
+            return self._initialize_error("Error connecting to database", e)
+
         self.save_progress("Database connection established")
+        return phantom.APP_SUCCESS
+
+    def initialize(self):
+        config = self.get_config()
+        self._state = self.load_state()
+        path = config.get('database_path')
+        if path is None:
+            state_dir = self.get_state_dir()
+            asset_id = self.get_asset_id()
+            path = '{}/{}_db.db'.format(state_dir, asset_id)
+        else:
+            # Don't create a database if they provided a path, throw an error if it doesn't exist
+            if not os.path.isfile(path):
+                return self._initialize_error("No SQLite database could be found at provided path")
+
+        self._asset_db_path = path
+
         return phantom.APP_SUCCESS
 
     def finalize(self):
