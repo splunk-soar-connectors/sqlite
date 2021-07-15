@@ -5,9 +5,9 @@
 # without a valid written license from Splunk Inc. is PROHIBITED.
 
 import phantom.app as phantom
+import phantom.rules as phrules
 from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
-from phantom.vault import Vault
 
 import os
 import re
@@ -35,7 +35,7 @@ class SqliteConnector(BaseConnector):
     def _get_format_vars(self, param):
         format_vars = param.get('format_vars')
         if format_vars:
-            format_vars = csv.reader([format_vars], quotechar='"', skipinitialspace=True, escapechar='\\').next()
+            format_vars = next(csv.reader([format_vars], quotechar='"', skipinitialspace=True, escapechar='\\'))
         else:
             format_vars = tuple()
         return format_vars
@@ -216,9 +216,20 @@ class SqliteConnector(BaseConnector):
         return phantom.APP_ERROR
 
     def _init_db(self, vault_id=None):
+
         if vault_id:
+
             # get file location from vault
-            path = Vault.get_file_path(vault_id)
+            try:
+                success, message, file_info = phrules.vault_info(vault_id=vault_id)
+                file_info = list(file_info)[0]
+            except IndexError:
+                return self._initialize_error("Vault file could not be found with supplied Vault ID")
+            except Exception:
+                return self._initialize_error("Vault ID not valid")
+
+            path = file_info.get('path')
+
         else:
             # use asset configured db file
             path = self._asset_db_path
@@ -278,16 +289,16 @@ if __name__ == '__main__':
     username = args.username
     password = args.password
 
-    if (username is not None and password is None):
+    if username is not None and password is None:
 
         # User specified a username but not a password, so ask
         import getpass
         password = getpass.getpass("Password: ")
 
-    if (username and password):
+    if username and password:
         login_url = BaseConnector._get_phantom_base_url() + "login"
         try:
-            print ("Accessing the Login page")
+            print("Accessing the Login page")
             r = requests.get(login_url, verify=False)
             csrftoken = r.cookies['csrftoken']
 
@@ -300,15 +311,15 @@ if __name__ == '__main__':
             headers['Cookie'] = 'csrftoken=' + csrftoken
             headers['Referer'] = login_url
 
-            print ("Logging into Platform to get the session id")
+            print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=False, data=data, headers=headers)
             session_id = r2.cookies['sessionid']
         except Exception as e:
-            print ("Unable to get session id from the platfrom. Error: " + str(e))
+            print("Unable to get session id from the platfrom. Error: " + str(e))
             exit(1)
 
-    if (len(sys.argv) < 2):
-        print "No test json specified as input"
+    if len(sys.argv) < 2:
+        print("No test json specified as input")
         exit(0)
 
     with open(sys.argv[1]) as f:
@@ -319,10 +330,10 @@ if __name__ == '__main__':
         connector = SqliteConnector()
         connector.print_progress_message = True
 
-        if (session_id is not None):
+        if session_id is not None:
             in_json['user_session_token'] = session_id
 
         ret_val = connector._handle_action(json.dumps(in_json), None)
-        print (json.dumps(json.loads(ret_val), indent=4))
+        print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)

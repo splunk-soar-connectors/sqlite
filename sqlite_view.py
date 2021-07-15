@@ -18,7 +18,7 @@ def display_query_results(provides, all_results, context):
             header_data = result.get_data()
 
     if header_data:
-        headers += header_data[0].keys()
+        headers += list(header_data[0].keys())
 
     if not headers_set:
         headers_set.update(headers)

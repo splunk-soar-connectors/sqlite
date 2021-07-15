@@ -10,12 +10,13 @@
     "product_version_regex": ".*",
     "publisher": "Phantom",
     "license": "Copyright (c) 2017-2020 Splunk Inc.",
-    "app_version": "1.0.14",
+    "app_version": "2.0.0",
     "utctime_updated": "2020-09-15T20:40:40.000000Z",
     "package_name": "phantom_sqlite",
-    "main_module": "sqlite_connector.pyc",
-    "min_phantom_version": "4.5.15922",
+    "main_module": "sqlite_connector.py",
+    "min_phantom_version": "4.9.39220",
     "app_wizard_version": "1.0.0",
+    "python_version": "3",
     "configuration": {
         "database_path": {
             "description": "Path to default SQLite database",
