@@ -1,10 +1,11 @@
 # File: sqlite_connector.py
-# Copyright (c) 2017-2019 Splunk Inc.
+# Copyright (c) 2017-2021 Splunk Inc.
 #
 # SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
 # without a valid written license from Splunk Inc. is PROHIBITED.
 
 import phantom.app as phantom
+import phantom.rules as phrules
 from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
@@ -27,10 +28,14 @@ class SqliteConnector(BaseConnector):
         super(SqliteConnector, self).__init__()
         self._state = None
 
+        self._asset_db_path = None
+        self._connection = None
+        self._cursor = None
+
     def _get_format_vars(self, param):
         format_vars = param.get('format_vars')
         if format_vars:
-            format_vars = csv.reader([format_vars], quotechar='"', skipinitialspace=True, escapechar='\\').next()
+            format_vars = next(csv.reader([format_vars], quotechar='"', skipinitialspace=True, escapechar='\\'))
         else:
             format_vars = tuple()
         return format_vars
@@ -177,6 +182,10 @@ class SqliteConnector(BaseConnector):
 
         ret_val = phantom.APP_SUCCESS
 
+        init_result = self._init_db(param.get('vault_id', None))
+        if phantom.is_fail(init_result):
+            return self.get_status()
+
         # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
 
@@ -206,18 +215,24 @@ class SqliteConnector(BaseConnector):
             self.set_status(phantom.APP_ERROR, msg, exception)
         return phantom.APP_ERROR
 
-    def initialize(self):
-        config = self.get_config()
-        self._state = self.load_state()
-        path = config.get('database_path')
-        if path is None:
-            state_dir = self.get_state_dir()
-            asset_id = self.get_asset_id()
-            path = '{}/{}_db.db'.format(state_dir, asset_id)
+    def _init_db(self, vault_id=None):
+
+        if vault_id:
+
+            # get file location from vault
+            try:
+                success, message, file_info = phrules.vault_info(vault_id=vault_id)
+                file_info = list(file_info)[0]
+            except IndexError:
+                return self._initialize_error("Vault file could not be found with supplied Vault ID")
+            except Exception:
+                return self._initialize_error("Vault ID not valid")
+
+            path = file_info.get('path')
+
         else:
-            # Don't create a databse if they provided a path, throw an error if it doesn't exist
-            if not os.path.isfile(path):
-                return self._initialize_error("No SQLite database could be found at provided path")
+            # use asset configured db file
+            path = self._asset_db_path
 
         try:
             self._connection = sqlite3.connect(
@@ -227,8 +242,26 @@ class SqliteConnector(BaseConnector):
             )
             self._cursor = self._connection.cursor()
         except Exception as e:
-            return self._initialize_error("error connecting to database", e)
+            return self._initialize_error("Error connecting to database", e)
+
         self.save_progress("Database connection established")
+        return phantom.APP_SUCCESS
+
+    def initialize(self):
+        config = self.get_config()
+        self._state = self.load_state()
+        path = config.get('database_path')
+        if path is None:
+            state_dir = self.get_state_dir()
+            asset_id = self.get_asset_id()
+            path = '{}/{}_db.db'.format(state_dir, asset_id)
+        else:
+            # Don't create a database if they provided a path, throw an error if it doesn't exist
+            if not os.path.isfile(path):
+                return self._initialize_error("No SQLite database could be found at provided path")
+
+        self._asset_db_path = path
+
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -256,16 +289,16 @@ if __name__ == '__main__':
     username = args.username
     password = args.password
 
-    if (username is not None and password is None):
+    if username is not None and password is None:
 
         # User specified a username but not a password, so ask
         import getpass
         password = getpass.getpass("Password: ")
 
-    if (username and password):
+    if username and password:
         login_url = BaseConnector._get_phantom_base_url() + "login"
         try:
-            print ("Accessing the Login page")
+            print("Accessing the Login page")
             r = requests.get(login_url, verify=False)
             csrftoken = r.cookies['csrftoken']
 
@@ -278,15 +311,15 @@ if __name__ == '__main__':
             headers['Cookie'] = 'csrftoken=' + csrftoken
             headers['Referer'] = login_url
 
-            print ("Logging into Platform to get the session id")
+            print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=False, data=data, headers=headers)
             session_id = r2.cookies['sessionid']
         except Exception as e:
-            print ("Unable to get session id from the platfrom. Error: " + str(e))
+            print("Unable to get session id from the platfrom. Error: " + str(e))
             exit(1)
 
-    if (len(sys.argv) < 2):
-        print "No test json specified as input"
+    if len(sys.argv) < 2:
+        print("No test json specified as input")
         exit(0)
 
     with open(sys.argv[1]) as f:
@@ -297,10 +330,10 @@ if __name__ == '__main__':
         connector = SqliteConnector()
         connector.print_progress_message = True
 
-        if (session_id is not None):
+        if session_id is not None:
             in_json['user_session_token'] = session_id
 
         ret_val = connector._handle_action(json.dumps(in_json), None)
-        print (json.dumps(json.loads(ret_val), indent=4))
+        print(json.dumps(json.loads(ret_val), indent=4))
 
     exit(0)

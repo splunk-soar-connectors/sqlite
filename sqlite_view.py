@@ -1,5 +1,5 @@
 # File: sqlite_view.py
-# Copyright (c) 2017-2019 Splunk Inc.
+# Copyright (c) 2017-2021 Splunk Inc.
 #
 # SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
 # without a valid written license from Splunk Inc. is PROHIBITED.
@@ -18,7 +18,7 @@ def display_query_results(provides, all_results, context):
             header_data = result.get_data()
 
     if header_data:
-        headers += header_data[0].keys()
+        headers += list(header_data[0].keys())
 
     if not headers_set:
         headers_set.update(headers)

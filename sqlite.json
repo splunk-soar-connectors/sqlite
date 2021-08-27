@@ -9,16 +9,20 @@
     "product_name": "SQLite",
     "product_version_regex": ".*",
     "publisher": "Phantom",
-    "license": "Copyright (c) 2017-2019 Splunk Inc.",
-    "app_version": "1.0.13",
-    "utctime_updated": "2019-01-04T00:36:45.000000Z",
+    "license": "Copyright (c) 2017-2021 Splunk Inc.",
+    "app_version": "2.0.2",
+    "utctime_updated": "2021-08-11T07:34:47.000000Z",
     "package_name": "phantom_sqlite",
-    "main_module": "sqlite_connector.pyc",
-    "min_phantom_version": "4.0.1068",
+    "main_module": "sqlite_connector.py",
+    "min_phantom_version": "4.9.39220",
     "app_wizard_version": "1.0.0",
+    "python_version": "3",
+    "latest_tested_versions": [
+        "SQLite 3.36.0"
+    ],
     "configuration": {
         "database_path": {
-            "description": "Path to SQLite database",
+            "description": "Path to default SQLite database",
             "data_type": "string",
             "required": false,
             "order": 0
@@ -39,10 +43,20 @@
             "action": "run query",
             "identifier": "run_query",
             "description": "Run a query against a table or tables in the database",
-            "verbose": "It is recommended to use the <b>format_vars</b> parameter when applicable. For example, if you wanted to find a specific IP, you could set <b>query</b> to a formatted string, like \"select * from my_hosts where ip = ?\" (note the use of <b>?</b>), and set <b>format_vars</b> to the IP address. This will ensure the inputs are safely sanitized and avoid SQL injection attacks.<br>Setting <b>no_commit</b> will make it so the App does not commit any changes made to the database (so you can ensure it's a read only query).<br><br>The <b>format_vars</b> parameter accepts a comma seperated list. You can escape commas by surrounding them in double quotes, and escape double quotes with a backslash. Assuming you have a list of values for the format vars, you can employ this code in your playbooks to properly format it into a string:<br> <code>format_vars_str = ','.join(['\"{}\"'.format(str(x).replace('\\\\', '\\\\\\\\').replace('\"', '\\\\\"')) for x in format_vars_list])</code>",
+            "verbose": "It is recommended to use the <b>format_vars</b> parameter when applicable. For example, if you wanted to find a specific IP, you could set <b>query</b> to a formatted string, like \"select * from my_hosts where ip = ?\" (note the use of <b>?</b>), and set <b>format_vars</b> to the IP address. This will ensure the inputs are safely sanitized and avoid SQL injection attacks.<br><br>The <b>format_vars</b> parameter accepts a comma seperated list. You can escape commas by surrounding them in double quotes, and escape double quotes with a backslash. Assuming you have a list of values for the format vars, you can employ this code in your playbooks to properly format it into a string:<br> <code>format_vars_str = ','.join(['\"{}\"'.format(str(x).replace('\\\\', '\\\\\\\\').replace('\"', '\\\\\"')) for x in format_vars_list])</code><br><br>Setting <b>no_commit</b> will make it so the App does not commit any changes made to the database (so you can ensure it's a read only query).",
             "type": "investigate",
             "read_only": false,
             "parameters": {
+                "vault_id": {
+                    "description": "Vault ID of SQLite database to use",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "vault id"
+                    ],
+                    "order": 0
+                },
                 "query": {
                     "description": "Query string",
                     "data_type": "string",
@@ -51,21 +65,21 @@
                     "contains": [
                         "sql query"
                     ],
-                    "order": 0
+                    "order": 1
                 },
                 "format_vars": {
                     "description": "Comma separated list of variables",
                     "data_type": "string",
                     "required": false,
                     "primary": false,
-                    "order": 1
+                    "order": 2
                 },
                 "no_commit": {
                     "description": "Do not commit changes to database",
                     "data_type": "boolean",
                     "required": false,
                     "default": false,
-                    "order": 2
+                    "order": 3
                 }
             },
             "output": [
@@ -76,6 +90,16 @@
                     "column_order": 0,
                     "example_values": [
                         "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.vault_id",
+                    "data_type": "string",
+                    "contains": [
+                        "vault id"
+                    ],
+                    "example_values": [
+                        "da39a3ee5e6b4b0d3255bfef95601890afd80709"
                     ]
                 },
                 {
@@ -143,6 +167,16 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
+                "vault_id": {
+                    "description": "Vault ID of SQLite database to use",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "vault id"
+                    ],
+                    "order": 0
+                },
                 "table_name": {
                     "description": "Name of table",
                     "data_type": "string",
@@ -151,7 +185,7 @@
                     "contains": [
                         "sqlite table name"
                     ],
-                    "order": 0
+                    "order": 1
                 }
             },
             "output": [
@@ -160,6 +194,16 @@
                     "data_type": "string",
                     "example_values": [
                         "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.vault_id",
+                    "data_type": "string",
+                    "contains": [
+                        "vault id"
+                    ],
+                    "example_values": [
+                        "da39a3ee5e6b4b0d3255bfef95601890afd80709"
                     ]
                 },
                 {
@@ -258,7 +302,18 @@
             "description": "List the tables in the database",
             "type": "investigate",
             "read_only": true,
-            "parameters": {},
+            "parameters": {
+                "vault_id": {
+                    "description": "Vault ID of SQLite database to use",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "vault id"
+                    ],
+                    "order": 0
+                }
+            },
             "output": [
                 {
                     "data_path": "action_result.status",
@@ -267,6 +322,16 @@
                     "column_order": 1,
                     "example_values": [
                         "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.vault_id",
+                    "data_type": "string",
+                    "contains": [
+                        "vault id"
+                    ],
+                    "example_values": [
+                        "da39a3ee5e6b4b0d3255bfef95601890afd80709"
                     ]
                 },
                 {
