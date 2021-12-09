@@ -12,17 +12,17 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-import phantom.app as phantom
-import phantom.rules as phrules
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-import os
-import re
 import csv
 import json
+import os
+import re
 import sqlite3
+
+import phantom.app as phantom
+import phantom.rules as phrules
 import requests
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -279,9 +279,10 @@ class SqliteConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import sys
-    import pudb
     import argparse
+    import sys
+
+    import pudb
 
     pudb.set_trace()
 
