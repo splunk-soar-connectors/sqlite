@@ -10,14 +10,14 @@
     "product_version_regex": ".*",
     "publisher": "Phantom",
     "license": "Copyright (c) 2017-2021 Splunk Inc.",
-    "app_version": "2.0.2",
-    "utctime_updated": "2021-08-11T07:34:47.000000Z",
+    "app_version": "2.0.3",
+    "utctime_updated": "2021-12-15T18:06:28.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
     "min_phantom_version": "4.9.39220",
     "app_wizard_version": "1.0.0",
     "python_version": "3",
-    "fips_compliant":true,
+    "fips_compliant": true,
     "latest_tested_versions": [
         "SQLite 3.36.0"
     ],
