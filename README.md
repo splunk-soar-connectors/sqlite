@@ -2,7 +2,7 @@
 # SQLite
 
 Publisher: Phantom  
-Connector Version: 2\.0\.3  
+Connector Version: 2\.0\.5  
 Product Vendor: SQLite  
 Product Name: SQLite  
 Product Version Supported (regex): "\.\*"  
@@ -10,7 +10,7 @@ Minimum Product Version: 4\.9\.39220
 
 This app supports investigative actions against a local SQLite database
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2017-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
