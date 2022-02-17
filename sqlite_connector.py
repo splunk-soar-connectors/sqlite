@@ -147,7 +147,8 @@ class SqliteConnector(BaseConnector):
         query = "PRAGMA table_info({});".format(table_name)
 
         try:
-            self._cursor.execute(query)
+            # With the table existence check above, we are safe from sql injection.
+            self._cursor.execute(query)  # nosemgrep: python.lang.security.audit.formatted-sql-query.formatted-sql-query
         except Exception as e:
             return action_result.set_status(
                 phantom.APP_ERROR, "Error listing columns", e
