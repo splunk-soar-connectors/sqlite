@@ -144,10 +144,8 @@ class SqliteConnector(BaseConnector):
         if len(results) < 1:
             return action_result.set_status(phantom.APP_ERROR, "There is no table with that name")
 
-        query = "PRAGMA table_info({});".format(table_name)
-
         try:
-            self._cursor.execute(query)
+            self._cursor.execute("PRAGMA table_info(?);", (table_name))
         except Exception as e:
             return action_result.set_status(
                 phantom.APP_ERROR, "Error listing columns", e
