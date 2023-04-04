@@ -14,7 +14,7 @@
     "utctime_updated": "2022-02-17T00:44:39.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
-    "min_phantom_version": "5.1.0",
+    "min_phantom_version": "5.5.0",
     "app_wizard_version": "1.0.0",
     "python_version": "3",
     "fips_compliant": true,
@@ -414,7 +414,7 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.12-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
@@ -458,7 +458,7 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.12-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
