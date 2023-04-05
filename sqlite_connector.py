@@ -1,6 +1,6 @@
 # File: sqlite_connector.py
 #
-# Copyright (c) 2017-2022 Splunk Inc.
+# Copyright (c) 2017-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@ class SqliteConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_run_query(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         query = param['query']
         format_vars = self._get_format_vars(param)
@@ -119,10 +120,11 @@ class SqliteConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['total_rows'] = len(results)
-
+        self.debug_print(f"Run query length of data : {summary['total_rows']}")
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully ran query")
 
     def _handle_list_columns(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         table_name = param['table_name']
 
@@ -163,10 +165,11 @@ class SqliteConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['num_columns'] = len(results)
-
+        self.debug_print(f"List Columns length of data : {summary['num_columns']}")
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed columns")
 
     def _handle_list_tables(self, param):
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         query = "SELECT * FROM sqlite_master WHERE type='table';"
@@ -186,7 +189,7 @@ class SqliteConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['num_tables'] = len(results)
-
+        self.debug_print(f"List Table length of data : {summary['num_tables']}")
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed tables")
 
     def handle_action(self, param):

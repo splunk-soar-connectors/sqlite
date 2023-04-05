@@ -8,13 +8,13 @@
     "logo_dark": "logo_sqlite_dark.svg",
     "product_name": "SQLite",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
-    "license": "Copyright (c) 2017-2022 Splunk Inc.",
-    "app_version": "2.0.6",
+    "publisher": "Splunk",
+    "license": "Copyright (c) 2017-2023 Splunk Inc.",
+    "app_version": "2.1.0",
     "utctime_updated": "2022-02-17T00:44:39.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
-    "min_phantom_version": "5.1.0",
+    "min_phantom_version": "5.5.0",
     "app_wizard_version": "1.0.0",
     "python_version": "3",
     "fips_compliant": true,
@@ -25,7 +25,6 @@
         "database_path": {
             "description": "Path to default SQLite database",
             "data_type": "string",
-            "required": false,
             "order": 0
         }
     },
@@ -51,7 +50,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -71,14 +69,11 @@
                 "format_vars": {
                     "description": "Comma separated list of variables",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "order": 2
                 },
                 "no_commit": {
                     "description": "Do not commit changes to database",
                     "data_type": "boolean",
-                    "required": false,
                     "default": false,
                     "order": 3
                 }
@@ -87,10 +82,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 0,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -171,7 +167,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -194,7 +189,8 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -307,7 +303,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -319,10 +314,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 1,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -414,7 +410,7 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.12-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
@@ -422,7 +418,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -434,7 +430,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2021.3-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2023.3-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -442,7 +438,7 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "typing_extensions",
@@ -450,7 +446,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.15-py2.py3-none-any.whl"
             }
         ]
     },
@@ -458,15 +454,15 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.12-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
-                "input_file": "wheels/py3/asgiref-3.5.0-py3-none-any.whl"
+                "input_file": "wheels/py3/asgiref-3.6.0-py3-none-any.whl"
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -478,7 +474,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2021.3-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2023.3-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -486,11 +482,11 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.15-py2.py3-none-any.whl"
             }
         ]
     }
