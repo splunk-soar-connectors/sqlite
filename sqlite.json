@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2017-2023 Splunk Inc.",
-    "app_version": "2.1.6",
+    "app_version": "2.1.0",
     "utctime_updated": "2022-02-17T00:44:39.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
