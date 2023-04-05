@@ -1,2 +1,2 @@
 **Unreleased**
-* Restructured the files of wheel folder
+* Updated the dependencies and restructured the wheels folder
