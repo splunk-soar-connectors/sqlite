@@ -8,9 +8,9 @@
     "logo_dark": "logo_sqlite_dark.svg",
     "product_name": "SQLite",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
-    "license": "Copyright (c) 2017-2022 Splunk Inc.",
-    "app_version": "2.0.6",
+    "publisher": "Splunk",
+    "license": "Copyright (c) 2017-2023 Splunk Inc.",
+    "app_version": "2.0.7",
     "utctime_updated": "2022-02-17T00:44:39.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
@@ -25,7 +25,6 @@
         "database_path": {
             "description": "Path to default SQLite database",
             "data_type": "string",
-            "required": false,
             "order": 0
         }
     },
@@ -51,7 +50,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -71,14 +69,11 @@
                 "format_vars": {
                     "description": "Comma separated list of variables",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
                     "order": 2
                 },
                 "no_commit": {
                     "description": "Do not commit changes to database",
                     "data_type": "boolean",
-                    "required": false,
                     "default": false,
                     "order": 3
                 }
@@ -87,10 +82,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 0,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -171,7 +167,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -194,7 +189,8 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
@@ -307,7 +303,6 @@
                 "vault_id": {
                     "description": "Vault ID of SQLite database to use",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "vault id"
@@ -319,10 +314,11 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 1,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
