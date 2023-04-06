@@ -1,17 +1,17 @@
 [comment]: # "Auto-generated SOAR connector documentation"
 # SQLite
 
-Publisher: Phantom  
-Connector Version: 2\.0\.5  
+Publisher: Splunk  
+Connector Version: 2.1.0  
 Product Vendor: SQLite  
 Product Name: SQLite  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.9\.39220  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.5.0  
 
 This app supports investigative actions against a local SQLite database
 
 [comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2017-2022 Splunk Inc."
+[comment]: # "  Copyright (c) 2017-2023 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
@@ -38,7 +38,7 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**database\_path** |  optional  | string | Path to default SQLite database
+**database_path** |  optional  | string | Path to default SQLite database
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  
@@ -64,29 +64,29 @@ Run a query against a table or tables in the database
 Type: **investigate**  
 Read only: **False**
 
-It is recommended to use the <b>format\_vars</b> parameter when applicable\. For example, if you wanted to find a specific IP, you could set <b>query</b> to a formatted string, like "select \* from my\_hosts where ip = ?" \(note the use of <b>?</b>\), and set <b>format\_vars</b> to the IP address\. This will ensure the inputs are safely sanitized and avoid SQL injection attacks\.<br><br>The <b>format\_vars</b> parameter accepts a comma seperated list\. You can escape commas by surrounding them in double quotes, and escape double quotes with a backslash\. Assuming you have a list of values for the format vars, you can employ this code in your playbooks to properly format it into a string\:<br> <code>format\_vars\_str = ','\.join\(\['"\{\}"'\.format\(str\(x\)\.replace\('\\\\', '\\\\\\\\'\)\.replace\('"', '\\\\"'\)\) for x in format\_vars\_list\]\)</code><br><br>Setting <b>no\_commit</b> will make it so the App does not commit any changes made to the database \(so you can ensure it's a read only query\)\.
+It is recommended to use the <b>format_vars</b> parameter when applicable. For example, if you wanted to find a specific IP, you could set <b>query</b> to a formatted string, like "select \* from my_hosts where ip = ?" (note the use of <b>?</b>), and set <b>format_vars</b> to the IP address. This will ensure the inputs are safely sanitized and avoid SQL injection attacks.<br><br>The <b>format_vars</b> parameter accepts a comma seperated list. You can escape commas by surrounding them in double quotes, and escape double quotes with a backslash. Assuming you have a list of values for the format vars, you can employ this code in your playbooks to properly format it into a string:<br> <code>format_vars_str = ','.join(['"{}"'.format(str(x).replace('\\\\', '\\\\\\\\').replace('"', '\\\\"')) for x in format_vars_list])</code><br><br>Setting <b>no_commit</b> will make it so the App does not commit any changes made to the database (so you can ensure it's a read only query).
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**vault\_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
+**vault_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
 **query** |  required  | Query string | string |  `sql query` 
-**format\_vars** |  optional  | Comma separated list of variables | string | 
-**no\_commit** |  optional  | Do not commit changes to database | boolean | 
+**format_vars** |  optional  | Comma separated list of variables | string | 
+**no_commit** |  optional  | Do not commit changes to database | boolean | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.vault\_id | string |  `vault id` 
-action\_result\.parameter\.format\_vars | string | 
-action\_result\.parameter\.no\_commit | boolean | 
-action\_result\.parameter\.query | string |  `sql query` 
-action\_result\.data\.\* | string | 
-action\_result\.summary\.total\_rows | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.vault_id | string |  `vault id`  |   da39a3ee5e6b4b0d3255bfef95601890afd80709 
+action_result.parameter.format_vars | string |  |   a 
+action_result.parameter.no_commit | boolean |  |  
+action_result.parameter.query | string |  `sql query`  |   SELECT \* FROM foo WHERE bar = ?; 
+action_result.data.\* | string |  |  
+action_result.summary.total_rows | numeric |  |  
+action_result.message | string |  |   Successfully ran query 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list columns'
 List the columns of a table
@@ -94,30 +94,30 @@ List the columns of a table
 Type: **investigate**  
 Read only: **True**
 
-The <b>table\_name</b> parameter must be composed of only alphanumeric characters plus '\_' and '$'\.
+The <b>table_name</b> parameter must be composed of only alphanumeric characters plus '_' and '$'.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**vault\_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
-**table\_name** |  required  | Name of table | string |  `sqlite table name` 
+**vault_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
+**table_name** |  required  | Name of table | string |  `sqlite table name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.vault\_id | string |  `vault id` 
-action\_result\.parameter\.table\_name | string |  `sqlite table name` 
-action\_result\.data\.\*\.cid | numeric | 
-action\_result\.data\.\*\.dflt\_value | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.notnull | numeric | 
-action\_result\.data\.\*\.pk | numeric | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.num\_columns | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.vault_id | string |  `vault id`  |   da39a3ee5e6b4b0d3255bfef95601890afd80709 
+action_result.parameter.table_name | string |  `sqlite table name`  |   foo 
+action_result.data.\*.cid | numeric |  |   0 
+action_result.data.\*.dflt_value | string |  |  
+action_result.data.\*.name | string |  |   bar 
+action_result.data.\*.notnull | numeric |  |   1 
+action_result.data.\*.pk | numeric |  |   0 
+action_result.data.\*.type | string |  |   text 
+action_result.summary.num_columns | numeric |  |  
+action_result.message | string |  |   Successfully listed columns 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list tables'
 List the tables in the database
@@ -128,19 +128,19 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**vault\_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
+**vault_id** |  optional  | Vault ID of SQLite database to use | string |  `vault id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.vault\_id | string |  `vault id` 
-action\_result\.data\.\*\.name | string |  `sqlite table name` 
-action\_result\.data\.\*\.rootpage | numeric | 
-action\_result\.data\.\*\.sql | string | 
-action\_result\.data\.\*\.tbl\_name | string |  `sqlite table name` 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.num\_tables | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.vault_id | string |  `vault id`  |   da39a3ee5e6b4b0d3255bfef95601890afd80709 
+action_result.data.\*.name | string |  `sqlite table name`  |   foo 
+action_result.data.\*.rootpage | numeric |  |   2 
+action_result.data.\*.sql | string |  |   CREATE TABLE foo (bar text NOT NULL) 
+action_result.data.\*.tbl_name | string |  `sqlite table name`  |   foo 
+action_result.data.\*.type | string |  |   table 
+action_result.summary.num_tables | numeric |  |  
+action_result.message | string |  |   Successfully listed tables 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1 

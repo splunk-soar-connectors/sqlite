@@ -1,6 +1,6 @@
 # File: sqlite_view.py
 #
-# Copyright (c) 2017-2022 Splunk Inc.
+# Copyright (c) 2017-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,4 +68,4 @@ def display_query_results(provides, all_results, context):
         "recordsFiltered": total,
     }
 
-    return HttpResponse(json.dumps(content), content_type='text/javascript')
+    return HttpResponse(json.dumps(content), content_type='text/javascript')  # nosemgrep
