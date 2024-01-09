@@ -1,0 +1,29 @@
+{% extends 'widgets/widget_template.html' %}
+{% load custom_template %}
+{% load humanize %}
+
+
+{% block widget_content %}
+    {% if not results.0.data  %}
+      <h4>No data found</h4>
+    {% else %}
+<table border="0">
+     {% for result in results %}
+       <tr>
+         {% for key in result.keys %}
+            <th style="max-width: 1000px;word-wrap: break-word;">{{ key }}</th>
+         {% endfor %}
+       </tr>
+       {% for record in result.data %}
+       <tr>
+         {% for k,v in record.items %}
+           <td style="max-width: 1000px;word-wrap: break-word;">
+             {{ v }}
+           </td>
+         {% endfor %}
+        </tr>
+        {% endfor %}
+     {% endfor %}
+</table>
+    {% endif %}
+{% endblock %}
