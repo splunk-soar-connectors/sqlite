@@ -14,7 +14,7 @@
     "utctime_updated": "2022-02-17T00:44:39.000000Z",
     "package_name": "phantom_sqlite",
     "main_module": "sqlite_connector.py",
-    "min_phantom_version": "5.5.0",
+    "min_phantom_version": "6.1.1",
     "app_wizard_version": "1.0.0",
     "python_version": "3",
     "fips_compliant": true,
