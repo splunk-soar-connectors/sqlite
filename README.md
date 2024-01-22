@@ -2,11 +2,11 @@
 # SQLite
 
 Publisher: Splunk  
-Connector Version: 2.1.1  
+Connector Version: 2.2.0  
 Product Vendor: SQLite  
 Product Name: SQLite  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.5.0  
+Minimum Product Version: 6.1.1  
 
 This app supports investigative actions against a local SQLite database
 
