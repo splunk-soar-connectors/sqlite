@@ -1,6 +1,6 @@
 # File: sqlite_view.py
 #
-# Copyright (c) 2017-2024 Splunk Inc.
+# Copyright (c) 2017-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,32 +15,30 @@
 
 
 def get_ctx_result(result):
-
     ctx_result = {}
     param = result.get_param()
     summary = result.get_summary()
     data = result.get_data()
 
-    ctx_result['param'] = param
+    ctx_result["param"] = param
 
-    if (data):
-        ctx_result['data'] = data
-        ctx_result['keys'] = list(dict(data[0]).keys())
+    if data:
+        ctx_result["data"] = data
+        ctx_result["keys"] = list(dict(data[0]).keys())
 
-    if (summary):
-        ctx_result['summary'] = summary
+    if summary:
+        ctx_result["summary"] = summary
 
     return ctx_result
 
 
 def display_query_results(provides, all_results, context):
-    context['results'] = results = []
+    context["results"] = results = []
     for summary, action_results in all_results:
         for result in action_results:
-
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
     # print context
-    return 'sqlite.html'
+    return "sqlite.html"
