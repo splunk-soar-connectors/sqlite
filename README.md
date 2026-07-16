@@ -1,7 +1,7 @@
 # SQLite
 
 Publisher: Splunk <br>
-Connector Version: 2.2.3 <br>
+Connector Version: 2.2.4 <br>
 Product Vendor: SQLite <br>
 Product Name: SQLite <br>
 Minimum Product Version: 6.1.1
