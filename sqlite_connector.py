@@ -1,6 +1,6 @@
 # File: sqlite_connector.py
 #
-# Copyright (c) 2017-2025 Splunk Inc.
+# Copyright (c) 2017-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -210,7 +210,7 @@ class SqliteConnector(BaseConnector):
         if vault_id:
             # get file location from vault
             try:
-                success, message, file_info = phrules.vault_info(vault_id=vault_id)
+                _success, _message, file_info = phrules.vault_info(vault_id=vault_id)
                 file_info = next(iter(file_info))
             except IndexError:
                 return self._initialize_error("Vault file could not be found with supplied Vault ID")

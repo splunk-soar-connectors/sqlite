@@ -1,9 +1,9 @@
 # SQLite
 
-Publisher: Splunk \
-Connector Version: 2.2.3 \
-Product Vendor: SQLite \
-Product Name: SQLite \
+Publisher: Splunk <br>
+Connector Version: 2.2.3 <br>
+Product Vendor: SQLite <br>
+Product Name: SQLite <br>
 Minimum Product Version: 6.1.1
 
 This app supports investigative actions against a local SQLite database
@@ -26,16 +26,16 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[run query](#action-run-query) - Run a query against a table or tables in the database \
-[list columns](#action-list-columns) - List the columns of a table \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[run query](#action-run-query) - Run a query against a table or tables in the database <br>
+[list columns](#action-list-columns) - List the columns of a table <br>
 [list tables](#action-list-tables) - List the tables in the database
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -50,7 +50,7 @@ No Output
 
 Run a query against a table or tables in the database
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **False**
 
 It is recommended to use the <b>format_vars</b> parameter when applicable. For example, if you wanted to find a specific IP, you could set <b>query</b> to a formatted string, like "select * from my_hosts where ip = ?" (note the use of <b>?</b>), and set <b>format_vars</b> to the IP address. This will ensure the inputs are safely sanitized and avoid SQL injection attacks.<br><br>The <b>format_vars</b> parameter accepts a comma seperated list. You can escape commas by surrounding them in double quotes, and escape double quotes with a backslash. Assuming you have a list of values for the format vars, you can employ this code in your playbooks to properly format it into a string:<br> <code>format_vars_str = ','.join(['"{}"'.format(str(x).replace('\\\\', '\\\\\\\\').replace('"', '\\\\"')) for x in format_vars_list])</code><br><br>Setting <b>no_commit</b> will make it so the App does not commit any changes made to the database (so you can ensure it's a read only query).
@@ -83,7 +83,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List the columns of a table
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 The <b>table_name</b> parameter must be composed of only alphanumeric characters plus '\_' and '$'.
@@ -117,7 +117,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List the tables in the database
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -146,7 +146,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
