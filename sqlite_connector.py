@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sqlite3
+from pathlib import Path
 
 import phantom.app as phantom
 import phantom.rules as phrules
@@ -207,10 +208,11 @@ class SqliteConnector(BaseConnector):
         return phantom.APP_ERROR
 
     def _init_db(self, vault_id=None):
+        use_uri = False
         if vault_id:
-            # get file location from vault
+            # Scope vault lookup to the container running this action.
             try:
-                _success, _message, file_info = phrules.vault_info(vault_id=vault_id)
+                _success, _message, file_info = phrules.vault_info(vault_id=vault_id, container_id=self.get_container_id())
                 file_info = next(iter(file_info))
             except IndexError:
                 return self._initialize_error("Vault file could not be found with supplied Vault ID")
@@ -218,13 +220,26 @@ class SqliteConnector(BaseConnector):
                 return self._initialize_error("Vault ID not valid")
 
             path = file_info.get("path")
+            if not path:
+                return self._initialize_error("Vault file did not include a usable path")
+
+            # Vault files are content-addressed and may be shared by multiple
+            # containers. Open them read-only so a query cannot modify shared
+            # bytes while the platform continues serving the original digest.
+            path = f"{Path(path).resolve().as_uri()}?mode=ro"
+            use_uri = True
 
         else:
             # use asset configured db file
             path = self._asset_db_path
 
         try:
-            self._connection = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES, isolation_level=None)
+            self._connection = sqlite3.connect(
+                path,
+                detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+                isolation_level=None,
+                uri=use_uri,
+            )
             self._cursor = self._connection.cursor()
         except Exception as e:
             return self._initialize_error("Error connecting to database", e)

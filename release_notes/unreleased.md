@@ -1,3 +1,3 @@
 **Unreleased**
 
-* Internal development tooling was refreshed for this connector.
+* Scope vault database access to the current container and open vault files read-only
