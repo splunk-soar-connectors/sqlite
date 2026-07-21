@@ -52,8 +52,20 @@ class SqliteConnector(BaseConnector):
 
     def _get_query_results(self, action_result):
         try:
-            columns = self._cursor.description
-            results = [{columns[index][0]: column for index, column in enumerate(value)} for value in self._cursor.fetchall()]
+            column_names = []
+            used_names = set()
+            for index, column in enumerate(self._cursor.description):
+                column_name = column[0]
+                if column_name in used_names:
+                    duplicate_name = f"{column_name}__duplicate_{index}"
+                    duplicate_index = 1
+                    while duplicate_name in used_names:
+                        duplicate_name = f"{column_name}__duplicate_{index}_{duplicate_index}"
+                        duplicate_index += 1
+                    column_name = duplicate_name
+                used_names.add(column_name)
+                column_names.append(column_name)
+            results = [dict(zip(column_names, value)) for value in self._cursor.fetchall()]
         except Exception as e:
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to retrieve results from query", e))
 
