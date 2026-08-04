@@ -219,6 +219,12 @@ class SqliteConnector(BaseConnector):
             self.set_status(phantom.APP_ERROR, msg, exception)
         return phantom.APP_ERROR
 
+    @staticmethod
+    def _sql_authorizer(action, _arg1, _arg2, _db_name, _trigger_source):
+        if action in (sqlite3.SQLITE_ATTACH, sqlite3.SQLITE_DETACH):
+            return sqlite3.SQLITE_DENY
+        return sqlite3.SQLITE_OK
+
     def _init_db(self, vault_id=None):
         use_uri = False
         if vault_id:
@@ -252,6 +258,7 @@ class SqliteConnector(BaseConnector):
                 isolation_level=None,
                 uri=use_uri,
             )
+            self._connection.set_authorizer(self._sql_authorizer)
             self._cursor = self._connection.cursor()
         except Exception as e:
             return self._initialize_error("Error connecting to database", e)
